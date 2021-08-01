@@ -1,0 +1,44 @@
+<?php  
+$connect = mysqli_connect("localhost", "root", "", "student");
+if(isset($_POST["submit"]))
+{
+ if($_FILES['file']['name'])
+ {
+  $filename = explode(".", $_FILES['file']['name']);
+  if($filename[1] == 'csv')
+  {
+   $handle = fopen($_FILES['file']['tmp_name'], "r");
+   while($data = fgetcsv($handle))
+   {
+                $item1 = mysqli_real_escape_string($connect, $data[0]);  
+                $item2 = mysqli_real_escape_string($connect, $data[1]);
+                $item3 = mysqli_real_escape_string($connect, $data[2]);  
+                $item4 = mysqli_real_escape_string($connect, $data[3]);
+                $query = "INSERT into stud_db(Reg_No,Name,Degree,Stream) values('$item1','$item2','$item3','$item4')";
+                mysqli_query($connect, $query);
+   }
+   fclose($handle);
+  }
+ }
+}
+?>  
+ 
+<html>  
+ <head>  
+  <title>Grootan Project</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+ </head>  
+ <body background="https://i.pinimg.com/originals/66/46/32/664632aada8327014297b719b228f4f2.jpg">
+  <img src="https://www.pngall.com/wp-content/uploads/4/Baby-Groot-1.png" alt="grootan" align="right">
+  <h1 align="center">Upload CSV File</h1><br />
+  <form method="post" enctype="multipart/form-data">
+   <div align="center">  
+    <label><h3>Select File:</h3></label>
+    <input type="file" name="file" />
+    <br />
+    <input type="submit" name="submit" value="Submit" class="btn btn-info" />
+   </div>
+  </form>
+ </body>  
+</html>
